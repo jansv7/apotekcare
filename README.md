@@ -1,7 +1,7 @@
 1. Daftar Anggota Kelompok
-- Agustinus Janssen Simamora - 2410631170055
-- Taqi Hamizan - 2410631170113
-- Haikal Quds - 2410631170141
+   - Agustinus Janssen Simamora - 2410631170055
+   - Taqi Hamizan - 2410631170113
+   - Haikal Quds - 2410631170141
 
 2. Deskripsi dan Tujuan Website
    ApotekCare adalah sistem informasi apotek berbasis web yang dikembangkan untuk membantu proses pengelolaan data obat, kategori obat, stok, transaksi penjualan, serta pemesanan obat secara online oleh customer.
@@ -9,27 +9,27 @@
    Tujuan dari website ini adalah mempermudah pengelolaan operasional apotek secara digital, mengurangi pencatatan manual, serta memberikan kemudahan bagi customer dalam pengecekan obat yang tersedia,
    sehingga tidak perlu repot untuk berkunjung ke apotek langsung ketika stok obat tidak tersedia dan mempermudah melakukan pemesanan obat melalui website.
 
-3. Fitur-fitur Utama Website
+4. Fitur-fitur Utama Website
    Fitur Admin/Apoteker
-   a. Login admin/apoteker.
-   b. Dashboard informasi apotek.
-   c. Mengelola data obat.
-   d. Melakukan transaksi kasir.
-   e. Mengelola pesanan customer online.
-   f. Mengubah Profile
-   g. Logout.
+   - Login admin/apoteker.
+   - Dashboard informasi apotek.
+   - Mengelola data obat.
+   - Melakukan transaksi kasir.
+   - Mengelola pesanan customer online.
+   - Mengubah Profile
+   - Logout.
 
    Fitur Customer
-   a. Registrasi akun customer.
-   b. Login customer.
-   c. Melihat katalog obat.
-   d. Mencari dan memilih obat.
-   e. Menambahkan obat ke keranjang.
-   f. Membuat pesanan.
-   g. Melihat daftar pesanan.
-   h. Logout.
+   - Registrasi akun customer.
+   - Login customer.
+   - Melihat katalog obat.
+   - Mencari dan memilih obat.
+   - Menambahkan obat ke keranjang.
+   - Membuat pesanan.
+   - Melihat daftar pesanan.
+   - Logout.
 
-4. Struktur Project
+6. Struktur Project
    UAS Project/
     ├── assets/
     │   ├── css/
@@ -55,28 +55,24 @@
     └── README.md
 
    Penjelasan folder/file penting
-   a. index.php: halaman awal website.
-   b. auth.php: file untuk proses login dan logout.
-   c. includes/database.php: file koneksi database.
-   d. includes/guard.php: file untuk membatasi akses berdasarkan role user.
-   e. apoteker/: folder halaman untuk staff atau apoteker.
-   f. customer/: folder halaman untuk customer.
-   g. foto/: folder penyimpanan file gambar.
-   h. apotekcare.sql: file database yang harus di-import ke phpMyAdmin.
-   i. README.md: file dokumentasi project.
+   - index.php: halaman awal website.
+   - auth.php: file untuk proses login dan logout.
+   - includes/database.php: file koneksi database.
+   - includes/guard.php: file untuk membatasi akses berdasarkan role user.
+   - apoteker/: folder halaman untuk staff atau apoteker.
+   - customer/: folder halaman untuk customer.
+   - foto/: folder penyimpanan file gambar.
+   - apotekcare.sql: file database yang harus di-import ke phpMyAdmin.
+   - README.md: file dokumentasi project.
 
 5.Cara Menjalankan Aplikasi
-  a. Download atau clone repository ini.
-  b. Pindahkan folder project ke dalam folder htdocs jika menggunakan XAMPP atau ke folder www jika menggunakan laragon.
-  c. Jalankan Apache dan MySQL melalui XAMPP/Laragon Control Panel.
-  d. Buka phpMyAdmin melalui browser:
-        http://localhost/phpmyadmin
-  e. Buat database baru dengan nama:
-        apotek_db
-  f. Import file database:
-        apotek_db.sql
-  g. Sesuaikan konfigurasi database pada file:
-        includes/database.php
+  - Download atau clone repository ini.
+  - Pindahkan folder project ke dalam folder htdocs jika menggunakan XAMPP atau ke folder www jika menggunakan laragon.
+  - Jalankan Apache dan MySQL melalui XAMPP/Laragon Control Panel.
+  - Buka phpMyAdmin melalui browser:http://localhost/phpmyadmin
+  - Buat database baru dengan nama:apotek_db
+  - Import file database:apotek_db.sql
+  - Sesuaikan konfigurasi database pada file:includes/database.php
   
   Contoh konfigurasi:
   
