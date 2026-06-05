@@ -75,11 +75,10 @@
   - Sesuaikan konfigurasi database pada file:includes/database.php
   
   Contoh konfigurasi:
-  
-  $host = "localhost";
-  $user = "root";
-  $password = "";
-  $database = "apotek_db";
+  - $host = "localhost";
+  - $user = "root";
+  - $password = "";
+  - $database = "apotek_db";
   
   Jalankan website melalui browser:
   http://localhost/UAS Project/
