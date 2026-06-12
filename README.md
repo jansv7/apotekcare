@@ -84,4 +84,4 @@
   http://localhost/UAS Project/
 
 6. Link Video Presentasi
-   
+   - https://youtu.be/Gmk4fSSvXYc
