@@ -73,7 +73,12 @@
   - Buat database baru dengan nama:apotek_db
   - Import file database:apotek_db.sql
   - Sesuaikan konfigurasi database pada file:includes/database.php
-  
+  - Akun demo:
+    - Admin       : email    = admin@apotek.com
+                    password = admin123
+    - Pelanggan   : email    = taqi@gmail.com
+                    password = taqi123
+                    
   Contoh konfigurasi:
   - $host = "localhost";
   - $user = "root";
