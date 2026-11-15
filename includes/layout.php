@@ -28,8 +28,8 @@ $user = currentUser();
     <div class="nav-label">Menu</div>
     <a href="dashboard.php"  class="nav-item <?= ($activePage??'')==='dashboard' ?'active':'' ?>"> Dashboard</a>
     <a href="obat.php"       class="nav-item <?= ($activePage??'')==='obat'      ?'active':'' ?>"> Data Obat</a>
-    <a href="transaksi.php"  class="nav-item <?= ($activePage??'')==='transaksi' ?'active':'' ?>"> Transaksi</a>
-    <a href="pesanan_admin.php"  class="nav-item <?= ($activePage??'')==='pesanan' ?'active':'' ?>"> Kelola Pesanan</a>
+    <a href="transaksi.php"  class="nav-item <?= ($activePage??'')==='transaksi' ?'active':'' ?>"> Riwayat Transaksi</a>
+    <a href="pesanan_admin.php"  class="nav-item <?= ($activePage??'')==='pesanan' ?'active':'' ?>"> Kelola Pesanan Online</a>
 
     <div class="nav-label">Akun</div>
     <a href="profile.php"    class="nav-item <?= ($activePage??'')==='profile'   ?'active':'' ?>"> Profil Saya</a>
