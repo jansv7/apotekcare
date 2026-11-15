@@ -3,7 +3,7 @@ $pageTitle = 'Data Obat'; $activePage = 'obat';
 require_once '../config/db.php';
 require_once '../includes/layout.php';
 
-$katList = $pdo->query("SELECT * FROM kategori_obat ORDER BY nama")->fetchAll();
+$katList = $pdo->query("SELECT k.id, k.nama, (SELECT COUNT(*) FROM obat o WHERE o.kategori_id = k.id) AS total_obat FROM kategori_obat k ORDER BY k.nama")->fetchAll();
 $filterKat = $_GET['kat'] ?? '';
 $search    = trim($_GET['q'] ?? '');
 $where = ['1=1']; 
@@ -35,7 +35,8 @@ $obatList=$stmt->fetchAll();
         <option value="<?= $k['id'] ?>" <?= $filterKat==$k['id']?'selected':'' ?>><?= htmlspecialchars($k['nama']) ?></option>
         <?php endforeach; ?>
     </select>
-    <button class="btn btn-green" onclick="openModal('m-tambah')">＋ Tambah Obat</button>
+    <button type="button" class="btn btn-outline" onclick="openModal('m-kategori')">🏷️ Kelola Kategori</button>
+    <button type="button" class="btn btn-green" onclick="openModal('m-tambah')">＋ Tambah Obat</button>
 </div>
 
 <div class="card" style="padding:0;overflow:hidden">
@@ -201,7 +202,71 @@ $obatList=$stmt->fetchAll();
     </div>
 </div>
 
+<!-- Modal Kelola Kategori -->
+<div class="overlay" id="m-kategori">
+<div class="modal" style="max-width:560px">
+    <div class="modal-hd">
+        <div class="modal-title">🏷️ Kelola Kategori Obat</div>
+        <button class="modal-x" onclick="closeModal('m-kategori')">✕</button>
+    </div>
+
+    <!-- Form Tambah Kategori -->
+    <form action="obat_handler.php" method="POST" style="display:flex;gap:8px;margin-bottom:14px">
+        <input type="hidden" name="action" value="tambah_kategori"/>
+        <input type="text" name="nama" placeholder="Nama kategori baru (misal: Obat Mata)..." required style="flex:1"/>
+        <button type="submit" class="btn btn-green">＋ Tambah</button>
+    </form>
+
+    <!-- Form Edit Kategori (Muncul saat tombol Edit diklik) -->
+    <form action="obat_handler.php" method="POST" id="box-edit-kat" style="display:none;gap:8px;margin-bottom:14px;padding:10px;border-radius:8px;background:rgba(245,158,11,.12)">
+        <input type="hidden" name="action" value="edit_kategori"/>
+        <input type="hidden" name="id" id="ek-id"/>
+        <input type="text" name="nama" id="ek-nama" placeholder="Ubah nama kategori..." required style="flex:1"/>
+        <button type="submit" class="btn btn-amber">Simpan</button>
+        <button type="button" class="btn btn-outline" onclick="batalEditKat()">Batal</button>
+    </form>
+
+    <!-- Tabel Daftar Kategori -->
+    <div class="table-wrap" style="max-height:300px;overflow-y:auto">
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Nama Kategori</th>
+                    <th>Jumlah Obat</th>
+                    <th style="text-align:center">Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php if (empty($katList)): ?>
+                <tr><td colspan="4" style="text-align:center;color:var(--muted)">Belum ada kategori</td></tr>
+                <?php else: ?>
+                <?php foreach ($katList as $idx => $k): ?>
+                <tr>
+                    <td style="color:var(--muted);font-size:.78rem"><?= $idx + 1 ?></td>
+                    <td style="font-weight:600"><?= htmlspecialchars($k['nama']) ?></td>
+                    <td><span class="badge b-gray"><?= (int)$k['total_obat'] ?> obat</span></td>
+                    <td style="text-align:center;white-space:nowrap">
+                        <button type="button" class="btn btn-amber btn-sm"
+                            onclick="editKat(<?= $k['id'] ?>, '<?= htmlspecialchars(addslashes($k['nama'])) ?>')">Edit</button>
+                        <form action="obat_handler.php" method="POST" style="display:inline"
+                            onsubmit="return confirm('Hapus kategori <?= htmlspecialchars(addslashes($k['nama'])) ?>? Obat dalam kategori ini tetap tersimpan tanpa kategori.')">
+                            <input type="hidden" name="action" value="hapus_kategori"/>
+                            <input type="hidden" name="id" value="<?= $k['id'] ?>"/>
+                            <button type="submit" class="btn btn-red btn-sm" style="margin-left:4px">🗑</button>
+                        </form>
+                    </td>
+                </tr>
+                <?php endforeach; ?>
+                <?php endif; ?>
+            </tbody>
+        </table>
+    </div>
+</div>
+</div>
+
 <script>
+
 function openEdit(d){
     document.getElementById('e-id').value    = d.id;
     document.getElementById('e-kode').value  = d.kode_obat;
@@ -220,6 +285,18 @@ function openDel(id,nama){
     document.getElementById('c-del-id').value=id;
     document.getElementById('c-del-text').textContent=`Obat "${nama}" akan dihapus permanen.`;
     document.getElementById('c-del').classList.add('open');
+}
+
+function editKat(id, nama) {
+    document.getElementById('ek-id').value = id;
+    document.getElementById('ek-nama').value = nama;
+    document.getElementById('box-edit-kat').style.display = 'flex';
+    document.getElementById('ek-nama').focus();
+}
+function batalEditKat() {
+    document.getElementById('box-edit-kat').style.display = 'none';
+    document.getElementById('ek-id').value = '';
+    document.getElementById('ek-nama').value = '';
 }
 </script>
 
