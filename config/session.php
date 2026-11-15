@@ -3,7 +3,7 @@ if (session_status() === PHP_SESSION_NONE) session_start();
 
 function requireLogin(): void {
     if (empty($_SESSION['user_id']) || $_SESSION['user_role'] === 'customer') {
-        header('Location: /UAS%20Project/apotek/index.php?error=Akses+ditolak');
+        header('Location: /apotekcare/apotek/index.php?error=Akses+ditolak');
         exit;
     }
 }
