@@ -64,6 +64,11 @@ $obatList = $stmt->fetchAll();
 </div>
 
 <div class="container">
+    <?php if (!empty($_GET['error'])): ?>
+    <div style="background:#fef2f2;border:1px solid #fecaca;color:#b91c1c;padding:12px 16px;border-radius:10px;margin-bottom:16px;font-size:.85rem;font-weight:600">
+        ⚠️ <?= htmlspecialchars($_GET['error']) ?>
+    </div>
+    <?php endif; ?>
     <div class="filter-bar">
         <a href="katalog.php" class="filter-chip <?= !$filterKat?'active':'' ?>">Semua</a>
         <?php foreach($katList as $k): ?>
@@ -155,7 +160,12 @@ $obatList = $stmt->fetchAll();
     <div id="transfer-info" style="display:none;background:#f0fdfa;border:1px solid var(--teal-m);border-radius:10px;padding:14px;margin-bottom:16px;font-size:.83rem">
         <b style="color:var(--teal)">Info Transfer:</b><br/>
         Bank BCA — No. Rek: <b>1234567890</b> a/n ApotekCare<br/>
-        <span style="color:var(--muted)">Tunjukkan bukti transfer kepada apoteker saat mengambil obat.</span>
+        <span style="color:var(--muted)">Upload bukti transfer sekarang (opsional, bisa menyusul di menu <b>Pesanan Saya</b>):</span>
+        <div style="margin-top:10px">
+            <input type="file" id="co-bukti" accept="image/jpeg,image/png,image/webp"
+                style="width:100%;font-size:.8rem;background:#fff;padding:7px;border:1px dashed var(--teal-m);border-radius:8px"/>
+            <div style="font-size:.72rem;color:var(--muted);margin-top:4px">Format: JPG, PNG, atau WEBP (Maks. 2MB)</div>
+        </div>
     </div>
 
     <div class="fg">
@@ -298,18 +308,28 @@ function simpanPesanan(){
     if(!nama){ alert('Nama penerima wajib diisi'); return; }
     const total = cart.reduce((s,c)=>s+c.subtotal,0);
     const catatan = document.getElementById('co-catatan').value.trim();
+    const fileInput = document.getElementById('co-bukti');
 
     localStorage.removeItem('apotek_cart');
 
-    const form=document.createElement('form');
-    form.method='POST'; form.action='pesanan_handler.php';
-    const add=(n,v)=>{ const i=document.createElement('input');i.type='hidden';i.name=n;i.value=v;form.appendChild(i); };
-    add('action','buat');
-    add('nama_penerima',nama);
-    add('metode_bayar',metodeBayar);
-    add('total_harga',total);
-    add('catatan',catatan);
-    add('cart',JSON.stringify(cart));
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = 'pesanan_handler.php';
+    form.enctype = 'multipart/form-data';
+
+    const add = (n,v) => { const i=document.createElement('input'); i.type='hidden'; i.name=n; i.value=v; form.appendChild(i); };
+    add('action', 'buat');
+    add('nama_penerima', nama);
+    add('metode_bayar', metodeBayar);
+    add('total_harga', total);
+    add('catatan', catatan);
+    add('cart', JSON.stringify(cart));
+
+    if (metodeBayar === 'transfer' && fileInput && fileInput.files.length > 0) {
+        fileInput.name = 'bukti_transfer';
+        form.appendChild(fileInput);
+    }
+
     document.body.appendChild(form);
     form.submit();
 }

@@ -102,6 +102,40 @@ $statusLabel = [
         <?php endforeach; ?>
         </tbody>
         </table>
+        
+        <?php if ($p['metode_bayar'] === 'transfer'): ?>
+        <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:12px 14px;margin-bottom:12px;font-size:.82rem">
+            <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+                <div>
+                    <strong style="color:var(--teal)">🏦 Pembayaran Transfer</strong> — BCA <b>1234567890</b> a/n ApotekCare
+                </div>
+                <?php if (!empty($p['bukti_transfer'])): ?>
+                    <a href="../uploads/bukti_transfer/<?= urlencode($p['bukti_transfer']) ?>" target="_blank"
+                        style="background:#ecfdf5;color:#059669;border:1px solid #a7f3d0;padding:4px 10px;border-radius:6px;font-weight:700;text-decoration:none;font-size:.76rem">
+                        🖼️ Lihat Bukti Transfer
+                    </a>
+                <?php else: ?>
+                    <span style="background:#fffbeb;color:#d97706;border:1px solid #fde68a;padding:4px 10px;border-radius:6px;font-weight:700;font-size:.76rem">
+                        ⚠️ Belum Upload Bukti
+                    </span>
+                <?php endif; ?>
+            </div>
+
+            <?php if ($p['status'] === 'menunggu'): ?>
+            <form action="pesanan_handler.php" method="POST" enctype="multipart/form-data"
+                    style="display:flex;align-items:center;gap:8px;margin-top:10px;flex-wrap:wrap">
+                <input type="hidden" name="action" value="upload_bukti"/>
+                <input type="hidden" name="id" value="<?= $p['id'] ?>"/>
+                <input type="file" name="bukti_transfer" accept="image/jpeg,image/png,image/webp" required
+                        style="font-size:.78rem;background:#fff;padding:5px 8px;border:1px solid #cbd5e1;border-radius:6px;flex:1;min-width:200px"/>
+                <button type="submit"
+                        style="background:var(--teal);color:#fff;border:none;padding:7px 14px;border-radius:6px;font-size:.78rem;font-weight:700;cursor:pointer">
+                    📤 <?= !empty($p['bukti_transfer']) ? 'Ganti Bukti' : 'Upload Bukti' ?>
+                </button>
+            </form>
+            <?php endif; ?>
+        </div>
+        <?php endif; ?>
 
         <div class="pes-foot">
         <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">

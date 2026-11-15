@@ -77,8 +77,20 @@ $counts = $pdo->query("SELECT status, COUNT(*) as c FROM pesanan GROUP BY status
             <td style="font-weight:700;color:var(--green)">Rp <?= number_format($p['total_harga'],0,',','.') ?></td>
             <td>
                 <span class="badge <?= $p['metode_bayar']==='transfer'?'b-blue':'b-gray' ?>">
-                <?= $p['metode_bayar']==='transfer'?'🏦 Transfer':'💵 Cash' ?>
+                    <?= $p['metode_bayar']==='transfer'?'🏦 Transfer':'💵 Cash' ?>
                 </span>
+                <?php if ($p['metode_bayar'] === 'transfer'): ?>
+                    <?php if (!empty($p['bukti_transfer'])): ?>
+                        <div style="margin-top:4px">
+                            <a href="../uploads/bukti_transfer/<?= urlencode($p['bukti_transfer']) ?>" target="_blank"
+                            style="font-size:.72rem;font-weight:700;color:var(--green);text-decoration:none">
+                                🖼️ Lihat Bukti
+                            </a>
+                        </div>
+                    <?php else: ?>
+                        <div style="font-size:.7rem;color:#d97706;font-weight:600;margin-top:3px">Belum ada bukti</div>
+                    <?php endif; ?>
+                <?php endif; ?>
             </td>
             <td><span class="badge <?= $st['cls'] ?>"><?= $st['label'] ?></span></td>
             <td style="font-size:.78rem;color:var(--muted)"><?= date('d M, H:i',strtotime($p['created_at'])) ?></td>
@@ -104,6 +116,7 @@ $counts = $pdo->query("SELECT status, COUNT(*) as c FROM pesanan GROUP BY status
         <button class="modal-x" onclick="closeModal('m-detail')">✕</button>
     </div>
     <div id="d-info" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px"></div>
+    <div id="d-bukti" style="margin-bottom:16px"></div>
     <div class="table-wrap">
         <table>
         <thead><tr><th>Nama Obat</th><th>Harga</th><th>Jumlah</th><th>Subtotal</th></tr></thead>
@@ -163,6 +176,28 @@ function lihatDetail(id){
             <div style="background:var(--bg);padding:11px;border-radius:8px"><div style="font-size:.68rem;font-weight:700;color:var(--muted)">METODE BAYAR</div><div style="font-weight:700">${d.metode_bayar==='transfer'?'🏦 Transfer':'💵 Cash'}</div></div>
             <div style="background:var(--bg);padding:11px;border-radius:8px"><div style="font-size:.68rem;font-weight:700;color:var(--muted)">STATUS</div><div style="font-weight:700">${d.status}</div></div>
             <div style="background:var(--bg);padding:11px;border-radius:8px"><div style="font-size:.68rem;font-weight:700;color:var(--muted)">CATATAN</div><div style="font-size:.83rem">${d.catatan||'—'}</div></div>`;
+
+        const buktiBox = document.getElementById('d-bukti');
+        if (d.metode_bayar === 'transfer') {
+            if (d.bukti_transfer) {
+                const imgUrl = '../uploads/bukti_transfer/' + encodeURIComponent(d.bukti_transfer);
+                buktiBox.innerHTML = `
+                    <div style="background:var(--bg);padding:12px;border-radius:8px">
+                        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+                            <span style="font-size:.68rem;font-weight:700;color:var(--muted)">BUKTI TRANSFER</span>
+                            <a href="${imgUrl}" target="_blank" style="font-size:.75rem;font-weight:700;color:var(--green);text-decoration:none">Buka Ukuran Penuh ↗</a>
+                        </div>
+                        <a href="${imgUrl}" target="_blank">
+                            <img src="${imgUrl}" alt="Bukti Transfer" style="max-height:200px;max-width:100%;border-radius:6px;border:1px solid var(--border);display:block"/>
+                        </a>
+                    </div>`;
+            } else {
+                buktiBox.innerHTML = `<div style="background:#fffbeb;border:1px solid #fde68a;color:#b45309;padding:10px 12px;border-radius:8px;font-size:.8rem;font-weight:600">⚠️ Customer belum mengunggah bukti transfer.</div>`;
+            }
+        } else {
+            buktiBox.innerHTML = '';
+        }
+
         let rows='';
         d.detail.forEach(x=>{
             rows+=`<tr><td style="padding:10px 12px;font-weight:600">${x.nama_obat}</td><td style="padding:10px 12px">${fmt(x.harga_satuan)}</td><td style="padding:10px 12px;text-align:center">${x.jumlah}</td><td style="padding:10px 12px;font-weight:700;color:var(--green)">${fmt(x.subtotal)}</td></tr>`;
