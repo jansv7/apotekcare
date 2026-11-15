@@ -27,12 +27,12 @@ $obatList=$stmt->fetchAll();
     <div class="search-box">
         <span class="search-icon"><i class="fas fa-search" style="color: #a9a4b0"></i></span>
         <input type="text" id="sInput" placeholder="Cari nama atau kode obat…"
-            value="<?= ($search) ?>" onkeyup="liveSearch('sInput','tObat')"/>
+            value="<?= htmlspecialchars($search) ?>" onkeyup="liveSearch('sInput','tObat')"/>
     </div>
-    <select class="filter-sel" onchange="location.href='obat.php?kat='+this.value">
+    <select class="filter-sel" onchange="location.href='obat.php'+(this.value?'?kat='+this.value:'')">
         <option value="">Semua Kategori</option>
         <?php foreach($katList as $k): ?>
-        <option value="<?= $k['id'] ?>" <?= $filterKat==$k['id']?'selected':'' ?>><?= ($k['nama']) ?></option>
+        <option value="<?= $k['id'] ?>" <?= $filterKat==$k['id']?'selected':'' ?>><?= htmlspecialchars($k['nama']) ?></option>
         <?php endforeach; ?>
     </select>
     <button class="btn btn-green" onclick="openModal('m-tambah')">＋ Tambah Obat</button>
